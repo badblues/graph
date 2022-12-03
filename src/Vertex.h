@@ -29,7 +29,7 @@ class Vertex{
         } 
         
     private:
-        Name name;
-        Data data;
+        Name name = Name(0);
+        Data data = Data(0);
         int index;
 };

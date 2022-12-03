@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 
-//TODO: ToString приятный для глаз
 //TODO: ToList, ToMatrix
 //TODO: ~Graph()
 //TODO: Vertex iterator
@@ -15,7 +14,7 @@
 
 int main() {
     vector<Vertex<int, int>*> vertices;
-    Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> graph1(0, 0, true, true);
+    Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> graph1(0, 0, false, true);
     cout << graph1.ToString();
     vertices.push_back(graph1.InsertV());
     cout << graph1.ToString();
@@ -23,9 +22,13 @@ int main() {
     cout << graph1.ToString();
     vertices.push_back(graph1.InsertV());
     cout << graph1.ToString();
-    graph1.InsertE(vertices[0], vertices[1]);
+    Edge<Vertex<int, int>, int, int>* edge = graph1.InsertE(vertices[0], vertices[1]);
+    edge->SetW(1);
+    edge->SetData(10);
     cout << graph1.ToString();
-    cout << graph1.InsertE(vertices[1], vertices[1]) << "\n";
+    edge = graph1.InsertE(vertices[1], vertices[1]);
+    edge->SetW(2);
+    edge->SetData(20);
     cout << graph1.ToString();
     cout << "edge[0,1] = " << graph1.GetEdge(vertices[0], vertices[1]) << "\n";
     cout << "edge[1,1] = " << graph1.GetEdge(vertices[1], vertices[1]) << "\n";

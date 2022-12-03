@@ -52,6 +52,6 @@ class Edge {
     private:
         Vertex* v1;
         Vertex* v2;
-        W w;
-        Data data;
+        W w = W(0);
+        Data data = Data(0);
 };

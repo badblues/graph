@@ -99,10 +99,20 @@ class GraphMatrix {
 
         string ToString() {
             stringstream *sstr = new stringstream;
-            cout << "MATRIX:\n";
             for (int i = 0; i < vertex_number; i++) {
-                for (int j = 0; j < vertex_number; j++)
-                    *sstr << matrix[i][j] << " ";
+                *sstr << " " << i << "[" << vertices[i]->GetName() << "," << vertices[i]->GetData() << "]"; 
+            }
+            *sstr << "\n";
+            for (int i = 0; i < vertex_number; i++) {
+                *sstr << i << " ";
+                for (int j = 0; j < vertex_number; j++) {
+                    Edge* edge = matrix[i][j];
+                    if (edge) {
+                        *sstr << "[" << edge->GetW() << ", " << edge->GetData() << "] ";
+                    } else {
+                        *sstr << "null  ";
+                    }
+                }
                 *sstr << "\n";
             }
             return sstr->str();

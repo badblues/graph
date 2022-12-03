@@ -111,13 +111,14 @@ class GraphList {
 
         string ToString() {
             stringstream *sstr = new stringstream;
-            cout << "LIST:\n";
             for (int i = 0; i < vertex_number; i++) {
-                for (int j = 0; j < list[i].size(); j++)
-                    *sstr << list[i][j] << " ";
+                *sstr << i << "[" << vertices[i]->GetName() << "," << vertices[i]->GetName() << "]: ";
+                for (int j = 0; j < list[i].size(); j++) {
+                    Edge* edge = list[i][j];
+                    *sstr << "[" << GetId(edge->V1()) << "," << GetId(edge->V2()) << ",w(" << edge->GetW() << "),d(" << edge->GetData() << ")] ";
+                }
                 *sstr << "\n";
             }
-            *sstr << "-----------\n";
             return sstr->str();
         }
 
