@@ -4,16 +4,17 @@
 #include <iostream>
 #include <vector>
 
+//TODO: GraphList
+//TODO: ToList, ToMatrix
+//TODO: ~Graph()
+//TODO: Vertex iterator
+//TODO: Edge iterator
+//TODO: Vertex outer edges iterator
+//TODO: hash_map for names and vertices in main app
+//TODO: task1, task2;
+
 int main() {
     vector<Vertex<int, int>*> vertices;
-    Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> graph(0, false, false);
-    cout << graph.V() << "\n";
-    cout << graph.K() << "\n";
-    cout << graph.Directed() << "\n";
-    cout << graph.Dense() << "\n";
-    vertices.push_back(graph.InsertV());
-    vertices.push_back(graph.InsertV());
-    graph.InsertE(vertices[0], vertices[1]);
-    graph.InsertE(vertices[1], vertices[0]);
+    Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> graph1(2, 1, false, false);
     return 0;
 }

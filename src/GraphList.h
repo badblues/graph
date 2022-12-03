@@ -20,16 +20,39 @@ class GraphList {
             cout << "GraphList()\n";
         }
 
+        int V() {
+            return vertex_number;
+        }
+
+        int E() {
+            return edge_number;
+        }
+
         Vertex* InsertV() {
-            return new Vertex(1, 1);
+            return nullptr;
         }
 
         Edge* InsertE(Vertex* V1, Vertex* V2) {
             return nullptr;
         }
 
-        // bool DeleteV(Vertex V);
-        // bool DeleteE(Vertex V1, Vertex V2); 
-        // Edge* GetEdge(Vertex V1, Vertex V2);
+        Edge* GetEdge(Vertex* V1, Vertex* V2) {
+            return nullptr;
+        }
+
+        bool DeleteE(Vertex* V1, Vertex* V2) {
+            return false;
+        }
+
+        bool DeleteV(Vertex* V) {
+            return false;
+        }
+
         // void Clear();
+
+        string StructureToString() {
+            stringstream *sstr = new stringstream;
+            *sstr << "list";
+            return sstr->str();
+        }
 };

@@ -1,34 +1,34 @@
 #pragma once
 
 
-template<typename N, typename ND>
+template<typename Name, typename Data>
 class Vertex{
     public:
 
         Vertex() {}
-        Vertex(N name_, ND data_) {
+        Vertex(Name name_, Data data_) {
             name = name_;
             data = data_;
         }
 
-        N GetName() {
+        Name GetName() {
             return name;
         }
 
-        ND GetData() {
+        Data GetData() {
             return data;
         }
 
-        void SetName(N name_) {
+        void SetName(Name name_) {
             name = name_;
         }
 
-        void SetData(ND data_) {
+        void SetData(Data data_) {
             data = data_;
         } 
         
     private:
-        N name;
-        ND data;
+        Name name;
+        Data data;
         int index;
 };

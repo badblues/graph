@@ -6,6 +6,8 @@
 #include "GraphList.h"
 #include <vector>
 #include <iostream>
+#include <time.h>
+#include <stdlib.h>
 using namespace std;
 
 template<class Vertex, class Edge>
@@ -24,15 +26,16 @@ class Graph {
         // void ToListGraph();
         // void ToMatrixGraph();
         Vertex* InsertV();
-        // bool DeleteV(Vertex V);
-        // bool DeleteE(Vertex V1, Vertex V2); 
-        // Edge* GetEdge(Vertex V1, Vertex V2);
+        bool DeleteV(Vertex* V);
+        bool DeleteE(Vertex* V1, Vertex* V2);
+        Edge* GetEdge(Vertex* V1, Vertex* V2);
         Edge* InsertE(Vertex* V1, Vertex* V2);
+        string StructureToString();
+        //string ToString();
     private:
         bool directed;
         bool dense;
-        int vertex_number;
-        int edge_number;
         GraphList<Vertex, Edge>* g_list;
         GraphMatrix<Vertex, Edge>* g_matrix;
+        vector<Vertex*> vertices;
 };

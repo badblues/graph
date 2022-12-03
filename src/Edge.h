@@ -3,7 +3,7 @@
 #include "Vertex.h"
 
 
-template<class Vertex, typename W, typename ED>
+template<class Vertex, typename W, typename Data>
 class Edge {
     public:
 
@@ -18,7 +18,7 @@ class Edge {
             w = w_;
         }
 
-        Edge(Vertex* v1_, Vertex* v2_, W w_, ED data_) {
+        Edge(Vertex* v1_, Vertex* v2_, W w_, Data data_) {
             v1 = v1_;
             v2 = v2_;
             w = w_;
@@ -41,11 +41,11 @@ class Edge {
             w = w_;
         }
 
-        ED GetData() {
+        Data GetData() {
             return data;
         }
 
-        void SetData(ED data_) {
+        void SetData(Data data_) {
             data = data_;
         }
         
@@ -53,5 +53,5 @@ class Edge {
         Vertex* v1;
         Vertex* v2;
         W w;
-        ED data;
+        Data data;
 };
