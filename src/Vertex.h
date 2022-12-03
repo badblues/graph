@@ -6,6 +6,7 @@ class Vertex{
     public:
 
         Vertex() {}
+        
         Vertex(Name name_, Data data_) {
             name = name_;
             data = data_;

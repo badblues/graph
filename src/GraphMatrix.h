@@ -12,8 +12,8 @@ class GraphMatrix {
         int edge_number;
         int vertex_number;
         bool directed;
-        vector<vector<Edge*>> matrix;
         vector<Vertex*> vertices;
+        vector<vector<Edge*>> matrix;
     public:
     
         GraphMatrix(bool directed) {
@@ -32,7 +32,7 @@ class GraphMatrix {
         }
 
         Vertex* InsertV() {
-            Vertex* vertex = new Vertex(vertices.size(), vertices.size());
+            Vertex* vertex = new Vertex();
             vertices.push_back(vertex);
             vertex_number++;
             vector<Edge*> vector_;
@@ -46,17 +46,10 @@ class GraphMatrix {
         }
 
         Edge* InsertE(Vertex* V1, Vertex* V2) {
-            int id1 = -1, id2 = -1;
+            int id1 = GetId(V1), id2 = GetId(V2);
             Edge* edge = new Edge(V1, V2);
-            for (int i = 0; i < vertex_number && (id1 == -1 || id2 == -1); i++) {
-                if (vertices[i] == V1)
-                    id1 = i;
-                if (vertices[i] == V2)
-                    id2 = i;
-            }
-            if (matrix[id1][id2] == nullptr) {
+            if (id1 != -1 && id2 != -1 && matrix[id1][id2] == nullptr) {
                 edge_number++;
-                cout << "isdirected = " << directed << "\n";
                 if (!directed) {
                     matrix[id2][id1] = edge;
                 }
@@ -68,25 +61,13 @@ class GraphMatrix {
         }
 
         Edge* GetEdge(Vertex* V1, Vertex* V2) {
-            int id1 = -1, id2 = -1;
-            for (int i = 0; i < vertex_number && (id1 == -1 || id2 == -1); i++) {
-                if (vertices[i] == V1)
-                    id1 = i;
-                if (vertices[i] == V2)
-                    id2 = i;
-            }
+            int id1 = GetId(V1), id2 = GetId(V2);
             return matrix[id1][id2];
         }
 
         bool DeleteE(Vertex* V1, Vertex* V2) {
-            int id1 = -1, id2 = -1;
-            for (int i = 0; i < vertex_number && (id1 == -1 || id2 == -1); i++) {
-                if (vertices[i] == V1)
-                    id1 = i;
-                if (vertices[i] == V2)
-                    id2 = i;
-            }
-            if (matrix[id1][id2] != nullptr) {
+            int id1 = GetId(V1), id2 = GetId(V2);
+            if (id1 != -1 && id2 != -1 && matrix[id1][id2] != nullptr) {
                 edge_number--;
                 free(matrix[id1][id2]);
                 matrix[id1][id2] = nullptr;
@@ -98,10 +79,7 @@ class GraphMatrix {
         } 
 
         bool DeleteV(Vertex* V) {
-            int id = -1;
-            for (int i = 0; i < vertex_number && id == -1; i++)
-                if (vertices[i] == V)
-                    id = i;
+            int id = GetId(V);
             if (id != -1) {
                 for (int i = 0; i < vertex_number; i++) {
                     DeleteE(vertices[id], vertices[i]);
@@ -109,17 +87,17 @@ class GraphMatrix {
                     matrix[i].erase(matrix[i].begin() + id);
                 }
                 matrix.erase(matrix.begin() + id);
+                free(vertices[id]);
+                vertices.erase(vertices.begin() + id);
                 vertex_number--;
                 return true;
             }
             return false;
         }
 
-        //my methods:
-
         // void Clear();
 
-        string StructureToString() {
+        string ToString() {
             stringstream *sstr = new stringstream;
             cout << "MATRIX:\n";
             for (int i = 0; i < vertex_number; i++) {
@@ -128,5 +106,15 @@ class GraphMatrix {
                 *sstr << "\n";
             }
             return sstr->str();
+        }
+
+    private:
+
+        int GetId(Vertex* V) {
+            int id = -1;
+            for (int i = 0; i < vertex_number && id == -1; i++)
+                if (vertices[i] == V)
+                    id = i;
+            return id;
         }
 };

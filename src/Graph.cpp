@@ -17,7 +17,7 @@ Graph<Vertex, Edge>::Graph(int V, bool directed, bool dense) {
     g_matrix = new GraphMatrix<Vertex, Edge>(directed);
     for (int i = 0; i < V; i++)
         dense ? g_list->InsertV() : g_matrix->InsertV();
-    cout << "Graph()\n";
+    cout << "Graph(), dense = " << dense << "\n";
 }
 
 template<class Vertex, class Edge>
@@ -50,7 +50,7 @@ Graph<Vertex, Edge>::Graph(int V, int E, bool directed, bool dense) {
         if (edge != nullptr)
             i++;
     }
-    cout << "Graph()\n";
+    cout << "Graph(), dense = " << dense << "\n";
 }
 
 template<class Vertex, class Edge>
@@ -107,13 +107,13 @@ template<class Vertex, class Edge>
 bool Graph<Vertex, Edge>::DeleteV(Vertex* V) {
     for (int i = 0; i < vertices.size(); i++)
         if (vertices[i] == V)
-            vertices.erace(vertices.begin()+i);
+            vertices.erase(vertices.begin()+i);
     return dense ? g_list->DeleteV(V) : g_matrix->DeleteV(V);
 }
 
 template<class Vertex, class Edge>
-string Graph<Vertex, Edge>::StructureToString() {
-    return dense ? g_list->StructureToString() : g_matrix->StructureToString();
+string Graph<Vertex, Edge>::ToString() {
+    return dense ? g_list->ToString() : g_matrix->ToString();
 }
 
 template

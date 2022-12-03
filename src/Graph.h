@@ -30,8 +30,7 @@ class Graph {
         bool DeleteE(Vertex* V1, Vertex* V2);
         Edge* GetEdge(Vertex* V1, Vertex* V2);
         Edge* InsertE(Vertex* V1, Vertex* V2);
-        string StructureToString();
-        //string ToString();
+        string ToString();
     private:
         bool directed;
         bool dense;
