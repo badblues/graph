@@ -5,8 +5,6 @@
 #include <vector>
 
 //TODO: ToList, ToMatrix
-//TODO: ~Graph()
-//TODO: Clear
 //TODO: Vertex iterator
 //TODO: Edge iterator
 //TODO: Vertex outer edges iterator
@@ -15,7 +13,7 @@
 
 int main() {
     vector<Vertex<int, int>*> vertices;
-    Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> graph1(0, 0, false, true);
+    Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> graph1(0, 0, false, false);
     cout << graph1.ToString();
     vertices.push_back(graph1.InsertV());
     cout << graph1.ToString();
