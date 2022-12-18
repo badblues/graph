@@ -12,19 +12,6 @@ class Edge {
             v2 = v2_;
         }
 
-        Edge(Vertex* v1_, Vertex* v2_, W w_) {
-            v1 = v1_;
-            v2 = v2_;
-            w = w_;
-        }
-
-        Edge(Vertex* v1_, Vertex* v2_, W w_, Data data_) {
-            v1 = v1_;
-            v2 = v2_;
-            w = w_;
-            data = data_;
-        }
-
         Vertex* V1() {
             return v1;
         }

@@ -33,7 +33,7 @@ class GraphMatrix : public GraphForm<Vertex, Edge> {
         Edge* InsertE(Vertex* V1, Vertex* V2) override {
             int id1 = V1->GetIndex(), id2 = V2->GetIndex();
             Edge* edge = new Edge(V1, V2);
-            if (id1 != -1 && id2 != -1 && this->matrix[id1][id2] == nullptr) {
+            if (this->matrix[id1][id2] == nullptr) {
                 this->edge_number++;
                 if (!this->directed) {
                     this->matrix[id2][id1] = edge;

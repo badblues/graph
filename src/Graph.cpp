@@ -164,5 +164,45 @@ string Graph<Vertex, Edge>::ToString() {
     return graph->ToString(vertices);
 }
 
+template<class Vertex, class Edge>
+vector<Vertex*> Graph<Vertex, Edge>::GetVertices() {
+    return vertices;
+}
+
+template<class Vertex, class Edge>
+vector<Edge*> Graph<Vertex, Edge>::GetEdges() {
+    return edges;
+}
+
+template<class Vertex, class Edge>
+VIterator<Vertex, Edge> Graph<Vertex, Edge>::VBegin() {
+    return VIterator<Vertex, Edge>(this, 0);
+}
+
+template<class Vertex, class Edge>
+VIterator<Vertex, Edge> Graph<Vertex, Edge>::VEnd() {
+    return VIterator<Vertex, Edge>(this, -1);
+}
+
+template<class Vertex, class Edge>
+EIterator<Vertex, Edge> Graph<Vertex, Edge>::EBegin() {
+    return EIterator<Vertex, Edge>(this, 0);
+}
+
+template<class Vertex, class Edge>
+EIterator<Vertex, Edge> Graph<Vertex, Edge>::EEnd() {
+    return EIterator<Vertex, Edge>(this, -1);
+}
+
+template<class Vertex, class Edge>
+VEIterator<Vertex, Edge> Graph<Vertex, Edge>::VEBegin(Vertex* V) {
+    return VEIterator<Vertex, Edge>(this, V, 0);
+}
+
+template<class Vertex, class Edge>
+VEIterator<Vertex, Edge> Graph<Vertex, Edge>::VEEnd(Vertex* V) {
+    return VEIterator<Vertex, Edge>(this, V, -1);
+}
+
 template
 class Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>>;

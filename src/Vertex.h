@@ -10,12 +10,6 @@ class Vertex{
         Vertex(int index_) {
             index = index_;
         }
-        
-        Vertex(Name name_, Data data_, int index_) {
-            name = name_;
-            data = data_;
-            index = index_;
-        }
 
         int GetIndex() {
             return index;

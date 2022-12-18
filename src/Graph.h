@@ -4,10 +4,12 @@
 #include "Vertex.h"
 #include "GraphMatrix.h"
 #include "GraphList.h"
+#include "Iterator.h"
 #include <vector>
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
+
 using namespace std;
 
 template<class Vertex, class Edge>
@@ -32,6 +34,14 @@ class Graph {
         Edge* InsertE(Vertex* V1, Vertex* V2);
         void Clear();
         string ToString();
+        vector<Vertex*> GetVertices();
+        vector<Edge*> GetEdges();
+        VIterator<Vertex, Edge> VBegin();
+        VIterator<Vertex, Edge> VEnd();
+        EIterator<Vertex, Edge> EBegin();
+        EIterator<Vertex, Edge> EEnd();
+        VEIterator<Vertex, Edge> VEBegin(Vertex* V);
+        VEIterator<Vertex, Edge> VEEnd(Vertex* V);
     private:
         bool directed;
         bool dense;

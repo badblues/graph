@@ -1,16 +1,15 @@
 #include "src/Graph.h"
 #include "src/Vertex.h"
 #include "src/Edge.h"
+#include "src/Iterator.h"
 #include <iostream>
 #include <vector>
 
-//TODO: ToList, ToMatrix
 //TODO: Vertex iterator
 //TODO: Edge iterator
 //TODO: Vertex outer edges iterator
 //TODO: hash_map for names and vertices in main app
 //TODO: task1, task2;
-//TODO: deleting and adding into edges
 //TODO: everywhere with erase mb change loop into iterator loop
 
 int main() {
@@ -35,5 +34,23 @@ int main() {
     cout << graph1.ToString();
     graph1.ToMatrixGraph();
     cout << graph1.ToString();
+    cout << "VERTEX ITERATOR:\n";
+    VIterator<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> iter = graph1.VBegin();
+    cout << (*iter)->GetIndex() << "\n";
+    ++iter;
+    cout << (*iter)->GetIndex() << "\n";
+    ++iter;
+    cout << (*iter)->GetIndex() << "\n";
+    cout << "EDGE ITERATOR:\n";
+    EIterator<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> iter2 = graph1.EBegin();
+    cout << (*iter2)->V1()->GetIndex() << "\n";
+    ++iter2;
+    cout << (*iter2)->V1()->GetIndex() << "\n";
+    cout << "VERTEX EDGES ITERATOR:\n";
+    VEIterator<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> iter3(vertices[1]);
+    iter3 = graph1.VEBegin(vertices[1]);
+    cout << (*iter3)->V1()->GetIndex() << " " << (*iter3)->V2()->GetIndex() << "\n";
+    ++iter3;
+    cout << (*iter3)->V1()->GetIndex() << " " << (*iter3)->V2()->GetIndex() << "\n";
     return 0;
 }
