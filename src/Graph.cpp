@@ -25,6 +25,12 @@ Graph<Vertex, Edge>::Graph(int V, bool directed, bool dense) {
 }
 
 template<class Vertex, class Edge>
+Graph<Vertex, Edge>::~Graph() {
+    vertices.clear();
+    delete graph;
+}
+
+template<class Vertex, class Edge>
 Graph<Vertex, Edge>::Graph(int V, int E, bool directed, bool dense) {
     this->directed = directed;
     this->dense = dense;
@@ -82,7 +88,31 @@ template<class Vertex, class Edge>
 bool Graph<Vertex, Edge>::Dense() {
     return dense;
 }
+template<class Vertex, class Edge>
+void Graph<Vertex, Edge>::ToListGraph() {
+    if (dense)
+        return;
+    dense = true;
+    delete graph;
+    graph = new GraphList<Vertex, Edge>(directed);
+    for (int i = 0; i < vertices.size(); i++)
+        graph->InsertV(vertices[i]);
+    for (int i = 0; i < edges.size(); i++)
+        graph->InsertE(edges[i]);
+}
 
+template<class Vertex, class Edge>
+void Graph<Vertex, Edge>::ToMatrixGraph() {
+    if (!dense)
+        return;
+    dense = false;
+    delete graph;
+    graph = new GraphMatrix<Vertex, Edge>(directed);
+    for (int i = 0; i < vertices.size(); i++)
+        graph->InsertV(vertices[i]);
+    for (int i = 0; i < edges.size(); i++)
+        graph->InsertE(edges[i]);
+}
 
 template<class Vertex, class Edge>
 Vertex* Graph<Vertex, Edge>::InsertV() {
@@ -93,7 +123,9 @@ Vertex* Graph<Vertex, Edge>::InsertV() {
 
 template<class Vertex, class Edge>
 Edge* Graph<Vertex, Edge>::InsertE(Vertex* V1, Vertex* V2) {
-    return graph->InsertE(V1, V2);
+    Edge* edge = graph->InsertE(V1, V2);
+    edges.push_back(edge);
+    return edge;
 }
 
 template<class Vertex, class Edge>
@@ -103,6 +135,10 @@ Edge* Graph<Vertex, Edge>::GetEdge(Vertex* V1, Vertex* V2) {
 
 template<class Vertex, class Edge>
 bool Graph<Vertex, Edge>::DeleteE(Vertex* V1, Vertex* V2) {
+    Edge* edge = GetEdge(V1, V2);
+    for (int i = 0; i < edges.size(); i++)
+        if (edges[i] == edge)
+            edges.erase(edges.begin() + i);
     return graph->DeleteE(V1, V2);
 }
 
@@ -110,13 +146,22 @@ template<class Vertex, class Edge>
 bool Graph<Vertex, Edge>::DeleteV(Vertex* V) {
     for (int i = 0; i < vertices.size(); i++)
         if (vertices[i] == V)
-            vertices.erase(vertices.begin()+i);
+            vertices.erase(vertices.begin() + i);
+    for (int i = 0; i < vertices.size(); i++)
+        vertices[i]->SetIndex(i);
     return graph->DeleteV(V);
 }
 
 template<class Vertex, class Edge>
+void Graph<Vertex, Edge>::Clear() {
+    graph->Clear();
+    vertices.clear();
+    edges.clear();
+}
+
+template<class Vertex, class Edge>
 string Graph<Vertex, Edge>::ToString() {
-    return graph->ToString();
+    return graph->ToString(vertices);
 }
 
 template

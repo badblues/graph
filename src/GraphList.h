@@ -18,8 +18,7 @@ class GraphList : public GraphForm<Vertex, Edge> {
         }
 
         Vertex* InsertV() override {
-            Vertex* vertex = new Vertex();
-            this->vertices.push_back(vertex);
+            Vertex* vertex = new Vertex(this->vertex_number);
             this->vertex_number++;
             vector<Edge*> vector_;
             this->matrix.push_back(vector_);
@@ -27,7 +26,7 @@ class GraphList : public GraphForm<Vertex, Edge> {
         }
 
         Edge* InsertE(Vertex* V1, Vertex* V2) override {
-            int id1 = this->GetId(V1), id2 = this->GetId(V2);
+            int id1 = V1->GetIndex(), id2 = V2->GetIndex();
             Edge* edge = new Edge(V1, V2);
             for (int i = 0; i < this->matrix[id1].size(); i++) {
                 if (!this->directed && IsDesired(V1, V2, this->matrix[id1][i]))
@@ -42,8 +41,32 @@ class GraphList : public GraphForm<Vertex, Edge> {
             return edge;
         }
 
+        Vertex* InsertV(Vertex* V) override {
+            this->vertex_number++;
+            vector<Edge*> vector_;
+            this->matrix.push_back(vector_);
+            return V;
+        }
+
+        Edge* InsertE(Edge* edge) override {
+            Vertex* V1 = edge->V1();
+            Vertex* V2 = edge->V2();
+            int id1 = V1->GetIndex(), id2 = V2->GetIndex();
+            for (int i = 0; i < this->matrix[id1].size(); i++) {
+                if (!this->directed && IsDesired(V1, V2, this->matrix[id1][i]))
+                    return nullptr;
+                if (this->directed && (this->matrix[id1][i]->V1() == V1 && this->matrix[id1][i]->V2() == V2))
+                    return nullptr;
+            }
+            this->matrix[id1].push_back(edge);
+            this->edge_number++;
+            if (!this->directed && id1 != id2)
+                this->matrix[id2].push_back(edge);
+            return edge;
+        }
+
         Edge* GetEdge(Vertex* V1, Vertex* V2) override {
-            int id1 = this->GetId(V1);
+            int id1 = V1->GetIndex();
             for (int i = 0; i < this->matrix[id1].size(); i++)
                 if (this->matrix[id1][i]->V2() == V2 && this->matrix[id1][i]->V1() == V1)
                     return this->matrix[id1][i];
@@ -51,7 +74,7 @@ class GraphList : public GraphForm<Vertex, Edge> {
         }
 
         bool DeleteE(Vertex* V1, Vertex* V2) override {
-            int id1 = this->GetId(V1), id2 = this->GetId(V2);
+            int id1 = V1->GetIndex(), id2 = V2->GetIndex();
             if (id1 != -1 && id2 != -1) {
                 if (!this->directed) {
                     for (int i = 0; i < this->matrix[id1].size(); i++)
@@ -61,7 +84,6 @@ class GraphList : public GraphForm<Vertex, Edge> {
                         }
                     for (int i = 0; i < this->matrix[id2].size(); i++)
                         if (IsDesired(V1, V2, this->matrix[id2][i])) {
-                            free(this->matrix[id2][i]);
                             this->matrix[id2].erase(this->matrix[id2].begin() + i);
                             this->edge_number--;
                             return true;
@@ -69,7 +91,6 @@ class GraphList : public GraphForm<Vertex, Edge> {
                 } else {
                     for (int i = 0; i < this->matrix[id1].size(); i++)
                         if (this->matrix[id1][i]->V1() == V1 && this->matrix[id1][i]->V2() == V2) {
-                            free(this->matrix[id1][i]);
                             this->matrix[id1].erase(this->matrix[id1].begin() + i);
                             this->edge_number--;
                             return true;
@@ -80,26 +101,24 @@ class GraphList : public GraphForm<Vertex, Edge> {
         }
 
         bool DeleteV(Vertex* V) override {
-            int id = this->GetId(V);
-            for (int i = 0; i < this->vertex_number; i++) {
-                DeleteE(V, this->vertices[i]);
-                if (this->directed)
-                    DeleteE(this->vertices[i], V);
+            int id = V->GetIndex();
+            for (int i = 0; i < this->matrix[id].size(); i++) {
+                Edge* edge = this->matrix[id][i];
+                Vertex* V2 = (edge->V1() == V) ? edge->V2() : edge->V1();
+                DeleteE(V, V2);
             }
             this->matrix.erase(this->matrix.begin() + id);
-            free(this->vertices[id]);
-            this->vertices.erase(this->vertices.begin() + id);
             this->vertex_number--;
-            return false;
+            return true;
         }
 
-        string ToString() override {
+        string ToString(vector<Vertex*> vertices) override {
             stringstream *sstr = new stringstream;
             for (int i = 0; i < this->vertex_number; i++) {
-                *sstr << i << "[" << this->vertices[i]->GetName() << "," << this->vertices[i]->GetName() << "]: ";
+                *sstr << i << "[" << vertices[i]->GetName() << "," << vertices[i]->GetName() << "]: ";
                 for (int j = 0; j < this->matrix[i].size(); j++) {
                     Edge* edge = this->matrix[i][j];
-                    *sstr << "[" << this->GetId(edge->V1()) << "," << this->GetId(edge->V2()) << ",w(" << edge->GetW() << "),d(" << edge->GetData() << ")] ";
+                    *sstr << "[" << edge->V1()->GetIndex() << "," << edge->V2()->GetIndex() << ",w(" << edge->GetW() << "),d(" << edge->GetData() << ")] ";
                 }
                 *sstr << "\n";
             }

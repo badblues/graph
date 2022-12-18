@@ -18,8 +18,7 @@ class GraphMatrix : public GraphForm<Vertex, Edge> {
         }
 
         Vertex* InsertV() override {
-            Vertex* vertex = new Vertex();
-            this->vertices.push_back(vertex);
+            Vertex* vertex = new Vertex(this->vertex_number);
             this->vertex_number++;
             vector<Edge*> vector_;
             this->matrix.push_back(vector_);
@@ -32,7 +31,7 @@ class GraphMatrix : public GraphForm<Vertex, Edge> {
         }
 
         Edge* InsertE(Vertex* V1, Vertex* V2) override {
-            int id1 = this->GetId(V1), id2 = this->GetId(V2);
+            int id1 = V1->GetIndex(), id2 = V2->GetIndex();
             Edge* edge = new Edge(V1, V2);
             if (id1 != -1 && id2 != -1 && this->matrix[id1][id2] == nullptr) {
                 this->edge_number++;
@@ -46,16 +45,41 @@ class GraphMatrix : public GraphForm<Vertex, Edge> {
             }
         }
 
+        Vertex* InsertV(Vertex* V) override {
+            this->vertex_number++;
+            vector<Edge*> vector_;
+            this->matrix.push_back(vector_);
+            for (int i = 0; i < this->vertex_number; i++) {
+                this->matrix[i].push_back(nullptr);  //push_backing in new column
+                if (i < this->vertex_number - 1)
+                    this->matrix[this->vertex_number - 1].push_back(nullptr); //push_backing in new row
+            }
+            return V;
+        }
+
+        Edge* InsertE(Edge* edge) override {
+            int id1 = (edge->V1())->GetIndex(), id2 = (edge->V2())->GetIndex();
+            if (id1 != -1 && id2 != -1 && this->matrix[id1][id2] == nullptr) {
+                this->edge_number++;
+                if (!this->directed) {
+                    this->matrix[id2][id1] = edge;
+                }
+                this->matrix[id1][id2] = edge;
+                return edge;
+            } else {
+                return nullptr;
+            }
+        }
+
         Edge* GetEdge(Vertex* V1, Vertex* V2) override {
-            int id1 = this->GetId(V1), id2 = this->GetId(V2);
+            int id1 = V1->GetIndex(), id2 = V2->GetIndex();
             return this->matrix[id1][id2];
         }
 
         bool DeleteE(Vertex* V1, Vertex* V2) override {
-            int id1 = this->GetId(V1), id2 = this->GetId(V2);
+            int id1 = V1->GetIndex(), id2 = V2->GetIndex();
             if (id1 != -1 && id2 != -1 && this->matrix[id1][id2] != nullptr) {
                 this->edge_number--;
-                free(this->matrix[id1][id2]);
                 this->matrix[id1][id2] = nullptr;
                 if (!this->directed)
                     this->matrix[id2][id1] = nullptr;
@@ -65,26 +89,24 @@ class GraphMatrix : public GraphForm<Vertex, Edge> {
         } 
 
         bool DeleteV(Vertex* V) override {
-            int id = this->GetId(V);
-            if (id != -1) {
-                for (int i = 0; i < this->vertex_number; i++) {
-                    DeleteE(this->vertices[id], this->vertices[i]);
-                    DeleteE(this->vertices[i], this->vertices[id]);
-                    this->matrix[i].erase(this->matrix[i].begin() + id);
+            int id = V->GetIndex();
+            for (int i = 0; i < this->matrix[id].size(); i++) {
+                Edge* edge = this->matrix[id][i];
+                if (edge != nullptr) {
+                    Vertex* V2 = (edge->V1() == V) ? edge->V2() : edge->V1();
+                    DeleteE(V, V2);
                 }
-                this->matrix.erase(this->matrix.begin() + id);
-                free(this->vertices[id]);
-                this->vertices.erase(this->vertices.begin() + id);
-                this->vertex_number--;
-                return true;
+                this->matrix[i].erase(this->matrix[i].begin() + id);
             }
-            return false;
+            this->matrix.erase(this->matrix.begin() + id);
+            this->vertex_number--;
+            return true;
         }
 
-        string ToString() override {
+        string ToString(vector<Vertex*> vertices) override {
             stringstream *sstr = new stringstream;
             for (int i = 0; i < this->vertex_number; i++) {
-                *sstr << " " << i << "[" << this->vertices[i]->GetName() << "," << this->vertices[i]->GetData() << "]"; 
+                *sstr << " " << i << "[" << vertices[i]->GetName() << "," << vertices[i]->GetData() << "]"; 
             }
             *sstr << "\n";
             for (int i = 0; i < this->vertex_number; i++) {
