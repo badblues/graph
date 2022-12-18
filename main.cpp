@@ -6,6 +6,7 @@
 
 //TODO: ToList, ToMatrix
 //TODO: ~Graph()
+//TODO: Clear
 //TODO: Vertex iterator
 //TODO: Edge iterator
 //TODO: Vertex outer edges iterator

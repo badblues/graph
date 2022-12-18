@@ -34,7 +34,6 @@ class Graph {
     private:
         bool directed;
         bool dense;
-        GraphList<Vertex, Edge>* g_list;
-        GraphMatrix<Vertex, Edge>* g_matrix;
+        GraphForm<Vertex, Edge>* graph;
         vector<Vertex*> vertices;
 };

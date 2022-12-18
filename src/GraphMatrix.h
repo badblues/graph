@@ -1,56 +1,40 @@
 #pragma once
 
-#include <vector>
-#include <iostream>
 #include <sstream>
+#include "GraphForm.h"
 using namespace std;
 
 //adjacency matrix
 template<class Vertex, class Edge>
-class GraphMatrix {
+class GraphMatrix : public GraphForm<Vertex, Edge> {
     private:
-        int edge_number;
-        int vertex_number;
-        bool directed;
-        vector<Vertex*> vertices;
         vector<vector<Edge*>> matrix;
     public:
     
-        GraphMatrix(bool directed) {
-            this->directed = directed;
-            edge_number = 0;
-            vertex_number = 0;
+        GraphMatrix(bool directed) : GraphForm<Vertex, Edge>(directed) {
             cout << "GraphMatrix()\n";
         }
 
-        int V() {
-            return vertex_number;
-        }
-
-        int E() {
-            return edge_number;
-        }
-
-        Vertex* InsertV() {
+        Vertex* InsertV() override {
             Vertex* vertex = new Vertex();
-            vertices.push_back(vertex);
-            vertex_number++;
+            this->vertices.push_back(vertex);
+            this->vertex_number++;
             vector<Edge*> vector_;
             matrix.push_back(vector_);
-            for (int i = 0; i < vertex_number; i++) {
+            for (int i = 0; i < this->vertex_number; i++) {
                 matrix[i].push_back(nullptr);  //push_backing in new column
-                if (i < vertex_number - 1)
-                    matrix[vertex_number - 1].push_back(nullptr); //push_backing in new row
+                if (i < this->vertex_number - 1)
+                    matrix[this->vertex_number - 1].push_back(nullptr); //push_backing in new row
             }
             return vertex;
         }
 
-        Edge* InsertE(Vertex* V1, Vertex* V2) {
-            int id1 = GetId(V1), id2 = GetId(V2);
+        Edge* InsertE(Vertex* V1, Vertex* V2) override {
+            int id1 = this->GetId(V1), id2 = this->GetId(V2);
             Edge* edge = new Edge(V1, V2);
             if (id1 != -1 && id2 != -1 && matrix[id1][id2] == nullptr) {
-                edge_number++;
-                if (!directed) {
+                this->edge_number++;
+                if (!this->directed) {
                     matrix[id2][id1] = edge;
                 }
                 matrix[id1][id2] = edge;
@@ -60,36 +44,36 @@ class GraphMatrix {
             }
         }
 
-        Edge* GetEdge(Vertex* V1, Vertex* V2) {
-            int id1 = GetId(V1), id2 = GetId(V2);
+        Edge* GetEdge(Vertex* V1, Vertex* V2) override {
+            int id1 = this->GetId(V1), id2 = this->GetId(V2);
             return matrix[id1][id2];
         }
 
-        bool DeleteE(Vertex* V1, Vertex* V2) {
-            int id1 = GetId(V1), id2 = GetId(V2);
+        bool DeleteE(Vertex* V1, Vertex* V2) override {
+            int id1 = this->GetId(V1), id2 = this->GetId(V2);
             if (id1 != -1 && id2 != -1 && matrix[id1][id2] != nullptr) {
-                edge_number--;
+                this->edge_number--;
                 free(matrix[id1][id2]);
                 matrix[id1][id2] = nullptr;
-                if (!directed)
+                if (!this->directed)
                     matrix[id2][id1] = nullptr;
                 return true;
             }
             return false;
         } 
 
-        bool DeleteV(Vertex* V) {
-            int id = GetId(V);
+        bool DeleteV(Vertex* V) override {
+            int id = this->GetId(V);
             if (id != -1) {
-                for (int i = 0; i < vertex_number; i++) {
-                    DeleteE(vertices[id], vertices[i]);
-                    DeleteE(vertices[i], vertices[id]);
+                for (int i = 0; i < this->vertex_number; i++) {
+                    DeleteE(this->vertices[id], this->vertices[i]);
+                    DeleteE(this->vertices[i], this->vertices[id]);
                     matrix[i].erase(matrix[i].begin() + id);
                 }
                 matrix.erase(matrix.begin() + id);
-                free(vertices[id]);
-                vertices.erase(vertices.begin() + id);
-                vertex_number--;
+                free(this->vertices[id]);
+                this->vertices.erase(this->vertices.begin() + id);
+                this->vertex_number--;
                 return true;
             }
             return false;
@@ -97,15 +81,15 @@ class GraphMatrix {
 
         // void Clear();
 
-        string ToString() {
+        string ToString() override {
             stringstream *sstr = new stringstream;
-            for (int i = 0; i < vertex_number; i++) {
-                *sstr << " " << i << "[" << vertices[i]->GetName() << "," << vertices[i]->GetData() << "]"; 
+            for (int i = 0; i < this->vertex_number; i++) {
+                *sstr << " " << i << "[" << this->vertices[i]->GetName() << "," << this->vertices[i]->GetData() << "]"; 
             }
             *sstr << "\n";
-            for (int i = 0; i < vertex_number; i++) {
+            for (int i = 0; i < this->vertex_number; i++) {
                 *sstr << i << " ";
-                for (int j = 0; j < vertex_number; j++) {
+                for (int j = 0; j < this->vertex_number; j++) {
                     Edge* edge = matrix[i][j];
                     if (edge) {
                         *sstr << "[" << edge->GetW() << ", " << edge->GetData() << "] ";
@@ -120,11 +104,4 @@ class GraphMatrix {
 
     private:
 
-        int GetId(Vertex* V) {
-            int id = -1;
-            for (int i = 0; i < vertex_number && id == -1; i++)
-                if (vertices[i] == V)
-                    id = i;
-            return id;
-        }
 };
