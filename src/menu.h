@@ -23,6 +23,10 @@ typedef unsigned int uint;
 
 using namespace std;
 
+void VIteratorMenu(Graph <g_type>* graph);
+void EIteratorMenu(Graph <g_type>* graph);
+void VEIteratorMenu(Graph <g_type>* graph, Vertex<v_type>* V);
+
 int GetNumber(int l_gap, int h_gap, const char *msg) {
   int number;
   cout << msg;
@@ -58,22 +62,15 @@ void ShowMainMenu() {
           " 12 IS DIRECTED\n"
           " 13 IS DENSE\n"
           " 14 CHANGE FORM\n"
-          " 15 TEST ITERATOR\n"
-          " 16 CLEAR\n"
-          " 17 NEW GRAPH\n"
-          " 18 INSERT VERTEXES\n"
-          " 19 INSERT VERTEXES\n"
+          " 15 TEST VERTEX ITERATOR\n"
+          " 16 TEST EDGE ITERATOR\n"
+          " 17 TEST VERTEX EDGES ITERATOR\n"
+          " 18 CLEAR\n"
+          " 19 NEW GRAPH\n"
+          " 20 INSERT VERTEXES\n"
+          " 21 INSERT EDGES\n"
           "  0 EXIT\n"
           "===================\n";
-}
-
-void ShowIteratorMenu() {
-  cout << "\n===================\n"
-          "   MENU:\n"
-          "  1 BEGIN\n"
-          "  2 ++\n"
-          "  3 *\n"
-          "  0 EXIT\n";
 }
 
 Graph<g_type> *GetGraph() {
@@ -92,6 +89,8 @@ bool GetVertex(map<string, Vertex<v_type> *> names, Vertex<v_type> **V) {
   auto res = names.find(str);
   if (res == names.end()) {
     cout << "NOT FOUND\n";
+    cin.get();
+    cin.get();
     return false;
   }
   *V = res->second;
@@ -109,6 +108,8 @@ bool GetVertexes(map<string, Vertex<v_type> *> names, Vertex<v_type> **V,
   auto res2 = names.find(str2);
   if (res == names.end() || res2 == names.end()) {
     cout << "NOT FOUND\n";
+    cin.get();
+    cin.get();
     return false;
   }
   *V = res->second;
@@ -119,7 +120,6 @@ bool GetVertexes(map<string, Vertex<v_type> *> names, Vertex<v_type> **V,
 void MainMenu() {
   int choice;
   bool flag = true;
-  bool iterator_flag = false;
   string str;
   int val, val2;
   Vertex<v_type> *V;
@@ -130,13 +130,14 @@ void MainMenu() {
   Graph<g_type> *graph = GetGraph();
 
   while (flag) {
+    system(clear_console_);
     V = nullptr;
     V2 = nullptr;
     E = nullptr;
     srand(time(NULL));
     cout << graph->ToString();
     ShowMainMenu();
-    choice = GetNumber(0, 19, "");
+    choice = GetNumber(0, 21, "");
     switch (choice) {
     case 1: {
       cout << "ENTER NAME:\n";
@@ -158,6 +159,8 @@ void MainMenu() {
       auto res = names.find(str);
       if (res == names.end()) {
         cout << "NOT FOUND\n";
+        cin.get();
+        cin.get();
         break;
       }
       V = res->second;
@@ -247,6 +250,7 @@ void MainMenu() {
         cout << "GRAPH IS DIRECTED\n";
       else
         cout << "GRAPH ISN'T DIRECTED\n";
+      cin.get();
       break;
     }
     case 13: {
@@ -254,6 +258,7 @@ void MainMenu() {
         cout << "GRAPH MADE OF ADJACENCY LIST\n";
       else
         cout << "GRAPH MADE OF ADJACENCY MATRIX\n";
+      cin.get();
       break;
     }
     case 14: {
@@ -264,19 +269,29 @@ void MainMenu() {
       break;
     }
     case 15: {
-
+      VIteratorMenu(graph);
       break;
     }
     case 16: {
-      graph->Clear();
+      EIteratorMenu(graph);
       break;
     }
     case 17: {
+      if (!GetVertex(names, &V))
+        break;
+      VEIteratorMenu(graph, V);
+      break;
+    }
+    case 18: {
+      graph->Clear();
+      break;
+    }
+    case 19: {
       delete graph;
       graph = GetGraph();
       break;
     }
-    case 18: {
+    case 20: {
       val = GetNumber(0, 20, "HOW MANY(0-20)?\n");
       for (int i = 0; i < val;) {
         str = "";
@@ -292,7 +307,7 @@ void MainMenu() {
       }
       break;
     }
-    case 19: {
+    case 21: {
       int V_ = graph->V();
       int max_edges =
           graph->Directed() ? V_ * (V_ - 1) + V_ : V_ * (V_ - 1) / 2 + V_;
@@ -320,6 +335,124 @@ void MainMenu() {
     case 0:
       flag = false;
       break;
+    }
+  }
+}
+
+void ShowIteratorMenu() {
+  cout << "\n===================\n"
+          "   MENU:\n"
+          "  1 BEGIN\n"
+          "  2 ++\n"
+          "  3 *\n"
+          "  0 EXIT\n";
+          "===================\n";
+}
+
+void VIteratorMenu(Graph <g_type>* graph) {
+  int choice;
+  bool flag = true;
+  VIterator<g_type> iter;
+  while (flag) {
+    system(clear_console_);
+    cout << graph->ToString();
+    ShowIteratorMenu();
+    choice = GetNumber(0, 3, "");
+    switch (choice) {
+    case 1: {
+      iter = graph->VBegin();
+      cout << "DONE!\n";
+      cin.get();
+      break;
+    }
+    case 2: {
+      ++iter;
+      break;
+    }
+    case 3: {
+      if (iter == graph->VEnd())
+        cout << "LOST ITERATOR";
+      else
+        cout << "NAME = " << (*iter)->GetName() << ", DATA = " << (*iter)->GetData() << "\n";
+      cin.get();
+      break;
+    }
+    case 0: {
+      flag = 0;
+      break;
+    }
+    }
+  }
+}
+
+void EIteratorMenu(Graph <g_type>* graph) {
+  int choice;
+  bool flag = true;
+  EIterator<g_type> iter;
+  while (flag) {
+    system(clear_console_);
+    cout << graph->ToString();
+    ShowIteratorMenu();
+    choice = GetNumber(0, 3, "");
+    switch (choice) {
+    case 1: {
+      iter = graph->EBegin();
+      cout << "DONE!\n";
+      cin.get();
+      break;
+    }
+    case 2: {
+      ++iter;
+      break;
+    }
+    case 3: {
+      if (iter == graph->EEnd())
+        cout << "LOST ITERATOR";
+      else
+        cout << "V1 = " << (*iter)->V1()->GetName() << ", V2 = " << (*iter)->V2()->GetName() << "\n";
+      cin.get();
+      break;
+    }
+    case 0: {
+      flag = 0;
+      break;
+    }
+    }
+  }
+}
+
+void VEIteratorMenu(Graph <g_type>* graph, Vertex<v_type>* V) {
+  int choice;
+  bool flag = true;
+  VEIterator<g_type> iter(V);
+  while (flag) {
+    system(clear_console_);
+    cout << graph->ToString();
+    ShowIteratorMenu();
+    choice = GetNumber(0, 3, "");
+    switch (choice) {
+    case 1: {
+      iter = graph->VEBegin(V);
+      cout << "DONE!\n";
+      cin.get();
+      break;
+    }
+    case 2: {
+      ++iter;
+      break;
+    }
+    case 3: {
+      if (iter == graph->VEEnd(V))
+        cout << "LOST ITERATOR";
+      else
+        cout << "V1 = " << (*iter)->V1()->GetName() << ", V2 = " << (*iter)->V2()->GetName() << "\n";
+      cin.get();
+      break;
+    }
+    case 0: {
+      flag = 0;
+      break;
+    }
     }
   }
 }

@@ -4,7 +4,6 @@
 #include "Graph.h"
 #include "Vertex.h"
 
-
 using namespace std;
 
 template <class Vertex, class Edge> class Graph;
@@ -15,6 +14,7 @@ public:
     graph = nullptr;
     id = -1;
   }
+
   VIterator(Graph<Vertex, Edge> *graph_, int id_) {
     graph = graph_;
     if (graph->V() == 0)
@@ -22,18 +22,29 @@ public:
     else
       id = id_;
   }
+
   VIterator &operator++() {
-    if (id != -1)
-      ;
+    if (id == -1)
+      return *this;
     id++;
     if (id >= graph->V())
       id = -1;
     return *this;
   }
+
   Vertex *operator*() { return graph->GetVertices()[id]; }
+
   void operator=(const VIterator &iter) {
     graph = iter.graph;
     id = iter.id;
+  }
+
+  bool operator==(const VIterator &iter) {
+    return (id == iter.id);
+  }
+
+  bool operator!=(const VIterator &iter) {
+    return (id != iter.id);
   }
 
 private:
@@ -47,6 +58,7 @@ public:
     graph = nullptr;
     id = -1;
   }
+
   EIterator(Graph<Vertex, Edge> *graph_, int id_) {
     graph = graph_;
     if (graph->E() == 0)
@@ -54,18 +66,28 @@ public:
     else
       id = id_;
   }
+
   EIterator &operator++() {
-    if (id != -1)
-      ;
+    if (id == -1)
+      return *this;
     id++;
     if (id >= graph->E())
       id = -1;
     return *this;
   }
+
   Edge *operator*() { return graph->GetEdges()[id]; }
   void operator=(const EIterator &iter) {
     graph = iter.graph;
     id = iter.id;
+  }
+
+  bool operator==(const EIterator &iter) {
+    return (id == iter.id);
+  }
+
+  bool operator!=(const EIterator &iter) {
+    return (id != iter.id);
   }
 
 private:
@@ -80,6 +102,7 @@ public:
     V = V_;
     id = -1;
   }
+
   VEIterator(Graph<Vertex, Edge> *graph_, Vertex *V_, int id_) {
     graph = graph_;
     V = V_;
@@ -93,7 +116,10 @@ public:
         return;
     id = -1;
   }
+
   VEIterator &operator++() {
+    if (id == -1)
+      return *this;
     id++;
     for (; id < graph->E(); id++)
       if (graph->GetEdges()[id]->V1() == V ||
@@ -102,11 +128,22 @@ public:
     id = -1;
     return *this;
   }
+
   Edge *operator*() { return graph->GetEdges()[id]; }
+
   void operator=(const VEIterator &iter) {
     graph = iter.graph;
     id = iter.id;
   }
+
+  bool operator==(const VEIterator &iter) {
+    return (id == iter.id);
+  }
+
+  bool operator!=(const VEIterator &iter) {
+    return (id != iter.id);
+  }
+
 
 private:
   Graph<Vertex, Edge> *graph;
