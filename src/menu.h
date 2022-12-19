@@ -8,12 +8,14 @@
 #include "Edge.h"
 #include "Graph.h"
 #include "Iterator.h"
+#include "Task1.h"
 #include "Vertex.h"
 #include <iostream>
 #include <map>
 #include <stdlib.h>
 #include <string>
 #include <time.h>
+
 
 typedef unsigned int uint;
 
@@ -23,9 +25,9 @@ typedef unsigned int uint;
 
 using namespace std;
 
-void VIteratorMenu(Graph <g_type>* graph);
-void EIteratorMenu(Graph <g_type>* graph);
-void VEIteratorMenu(Graph <g_type>* graph, Vertex<v_type>* V);
+void VIteratorMenu(Graph<g_type> *graph);
+void EIteratorMenu(Graph<g_type> *graph);
+void VEIteratorMenu(Graph<g_type> *graph, Vertex<v_type> *V);
 
 int GetNumber(int l_gap, int h_gap, const char *msg) {
   int number;
@@ -69,6 +71,8 @@ void ShowMainMenu() {
           " 19 NEW GRAPH\n"
           " 20 INSERT VERTEXES\n"
           " 21 INSERT EDGES\n"
+          " 22 TASK 1\n"
+          " 23 TASK 2\n"
           "  0 EXIT\n"
           "===================\n";
 }
@@ -122,8 +126,7 @@ void MainMenu() {
   bool flag = true;
   string str;
   int val, val2;
-  Vertex<v_type> *V;
-  Vertex<v_type> *V2;
+  Vertex<v_type> *V, *V2;
   Edge<e_type> *E;
   map<string, Vertex<string, int> *> names;
 
@@ -137,7 +140,7 @@ void MainMenu() {
     srand(time(NULL));
     cout << graph->ToString();
     ShowMainMenu();
-    choice = GetNumber(0, 21, "");
+    choice = GetNumber(0, 23, "");
     switch (choice) {
     case 1: {
       cout << "ENTER NAME:\n";
@@ -332,6 +335,16 @@ void MainMenu() {
       }
       break;
     }
+    case 22: {
+      if (!graph->Directed())
+        Task1<g_type> task1(graph);
+      else
+        cout << "GRAPH MUST NOT BE DIRECTED\n";
+      break;
+    }
+    case 23: {
+      break;
+    }
     case 0:
       flag = false;
       break;
@@ -346,10 +359,10 @@ void ShowIteratorMenu() {
           "  2 ++\n"
           "  3 *\n"
           "  0 EXIT\n";
-          "===================\n";
+  "===================\n";
 }
 
-void VIteratorMenu(Graph <g_type>* graph) {
+void VIteratorMenu(Graph<g_type> *graph) {
   int choice;
   bool flag = true;
   VIterator<g_type> iter;
@@ -373,7 +386,8 @@ void VIteratorMenu(Graph <g_type>* graph) {
       if (iter == graph->VEnd())
         cout << "LOST ITERATOR";
       else
-        cout << "NAME = " << (*iter)->GetName() << ", DATA = " << (*iter)->GetData() << "\n";
+        cout << "NAME = " << (*iter)->GetName()
+             << ", DATA = " << (*iter)->GetData() << "\n";
       cin.get();
       break;
     }
@@ -385,7 +399,7 @@ void VIteratorMenu(Graph <g_type>* graph) {
   }
 }
 
-void EIteratorMenu(Graph <g_type>* graph) {
+void EIteratorMenu(Graph<g_type> *graph) {
   int choice;
   bool flag = true;
   EIterator<g_type> iter;
@@ -409,7 +423,8 @@ void EIteratorMenu(Graph <g_type>* graph) {
       if (iter == graph->EEnd())
         cout << "LOST ITERATOR";
       else
-        cout << "V1 = " << (*iter)->V1()->GetName() << ", V2 = " << (*iter)->V2()->GetName() << "\n";
+        cout << "V1 = " << (*iter)->V1()->GetName()
+             << ", V2 = " << (*iter)->V2()->GetName() << "\n";
       cin.get();
       break;
     }
@@ -421,7 +436,7 @@ void EIteratorMenu(Graph <g_type>* graph) {
   }
 }
 
-void VEIteratorMenu(Graph <g_type>* graph, Vertex<v_type>* V) {
+void VEIteratorMenu(Graph<g_type> *graph, Vertex<v_type> *V) {
   int choice;
   bool flag = true;
   VEIterator<g_type> iter(V);
@@ -445,7 +460,8 @@ void VEIteratorMenu(Graph <g_type>* graph, Vertex<v_type>* V) {
       if (iter == graph->VEEnd(V))
         cout << "LOST ITERATOR";
       else
-        cout << "V1 = " << (*iter)->V1()->GetName() << ", V2 = " << (*iter)->V2()->GetName() << "\n";
+        cout << "V1 = " << (*iter)->V1()->GetName()
+             << ", V2 = " << (*iter)->V2()->GetName() << "\n";
       cin.get();
       break;
     }

@@ -7,7 +7,6 @@
 #include <vector>
 
 // TODO: task1, task2;
-
 int main() {
   MainMenu();
   return 0;
