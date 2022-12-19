@@ -67,9 +67,12 @@ public:
 
   Edge *GetEdge(Vertex *V1, Vertex *V2) override {
     int id1 = V1->GetIndex();
-    for (int i = 0; i < this->matrix[id1].size(); i++)
+    for (int i = 0; i < this->matrix[id1].size(); i++) {
       if (this->matrix[id1][i]->V2() == V2 && this->matrix[id1][i]->V1() == V1)
         return this->matrix[id1][i];
+      if (!this->directed && IsDesired(V1, V2, this->matrix[id1][i]))
+        return this->matrix[id1][i];
+    }
     return nullptr;
   }
 
@@ -120,7 +123,7 @@ public:
             << vertices[i]->GetData() << "]: ";
       for (int j = 0; j < this->matrix[i].size(); j++) {
         Edge *edge = this->matrix[i][j];
-        *sstr << "[" << edge->V1()->GetIndex() << "," << edge->V2()->GetIndex()
+        *sstr << "[" << edge->V1()->GetName() << "," << edge->V2()->GetName()
               << ",w(" << edge->GetW() << "),d(" << edge->GetData() << ")] ";
       }
       *sstr << "\n";

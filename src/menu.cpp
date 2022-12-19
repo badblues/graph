@@ -120,6 +120,7 @@ void MainMenu() {
     V = nullptr;
     V2 = nullptr;
     E = nullptr;
+    srand(time(NULL));
     cout << graph->ToString();
     ShowMainMenu();
     choice = GetNumber(0, 19, "");
@@ -190,26 +191,116 @@ void MainMenu() {
       break;
     }
     case 7: {
-
+      if (!GetVertexes(names, &V, &V2))
+        break;
+      E = graph->GetEdge(V, V2);
+      if (!E) {
+        cout << "NOT FOUND\n";
+        break;
+      }
+      cout << "WEIGHT = " << E->GetW() << ", DATA = " << E->GetData() << "\n";
+      cin.get();
       break;
     }
     case 8: {
-
+      if (!GetVertexes(names, &V, &V2))
+        break;
+      E = graph->GetEdge(V, V2);
+      if (!E) {
+        cout << "NOT FOUND\n";
+        break;
+      }
+      E->SetW(GetNumber(INT32_MIN, INT32_MAX, "ENTER WEIGHT(INT)\n"));
+      E->SetData(GetNumber(INT32_MIN, INT32_MAX, "ENTER DATA(INT)\n"));
       break;
     }
     case 9: {
+      cout << "VERTEX NUMBER = " << graph->V() << "\n";
+      cin.get();
       break;
     }
     case 10: {
-
+      cout << "EDGE NUMBER = " << graph->E() << "\n";
+      cin.get();
       break;
     }
     case 11: {
-
+      cout << "DENSITY COEFFICIENT = " << graph->K() << "\n";
+      cin.get();
       break;
     }
     case 12: {
+      if (graph->Directed())
+        cout << "GRAPH IS DIRECTED\n";
+      else
+        cout << "GRAPH ISN'T DIRECTED\n";
+      break;
+    }
+    case 13: {
+      if (graph->Dense())
+        cout << "GRAPH MADE OF ADJACENCY LIST\n";
+      else
+        cout << "GRAPH MADE OF ADJACENCY MATRIX\n";
+      break;
+    }
+    case 14: {
+      if (graph->Dense())
+        graph->ToMatrixGraph();
+      else
+        graph->ToListGraph();
+      break;
+    }
+    case 15: {
 
+      break;
+    }
+    case 16: {
+      graph->Clear();
+      break;
+    }
+    case 17: {
+      delete graph;
+      graph = GetGraph();
+      break;
+    }
+    case 18: {
+      val = GetNumber(0, 20, "HOW MANY(0-20)?\n");
+      for (int i = 0; i < val;) {
+        str = "";
+        str += 'A' + rand() % 26;
+        str += 'A' + rand() % 26;
+        if (names.find(str) != names.end())
+          continue;
+        V = graph->InsertV();
+        V->SetName(str);
+        V->SetData(rand() % 10);
+        names.insert({str, V});
+        i++;
+      }
+      break;
+    }
+    case 19: {
+      int V_ = graph->V();
+      int max_edges = graph->Directed() ? V_ * (V_ - 1) + V_ : V_ * (V_ - 1) / 2 + V_;
+      cout << "HOW MANY(0-" << max_edges << ")?\n";
+      int E_ = GetNumber(0, max_edges, "");
+      for (int i = 0; i < E_;) {
+        int id1 = rand() % V_;
+        int id2 = rand() % V_;
+        for (auto iter : names) {
+          if (iter.second->GetIndex() == id1)
+            V = iter.second;
+          if (iter.second->GetIndex() == id2)
+            V2 = iter.second;
+        }
+        E = graph->InsertE(V, V2);
+        if (E) {
+          i++;
+          E->SetW(rand() % 100);
+          E->SetData(rand() % 100);
+        }
+        E = nullptr;
+      }
       break;
     }
     case 0:

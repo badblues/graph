@@ -23,10 +23,7 @@ Graph<Vertex, Edge>::Graph(int V, bool directed, bool dense) {
   cout << "Graph(), dense = " << dense << "\n";
 }
 
-template <class Vertex, class Edge> Graph<Vertex, Edge>::~Graph() {
-  vertices.clear();
-  delete graph;
-}
+
 
 template <class Vertex, class Edge>
 Graph<Vertex, Edge>::Graph(int V, int E, bool directed, bool dense) {
@@ -36,15 +33,9 @@ Graph<Vertex, Edge>::Graph(int V, int E, bool directed, bool dense) {
     graph = new GraphList<Vertex, Edge>(directed);
   else
     graph = new GraphMatrix<Vertex, Edge>(directed);
-  if (directed) {
-    int max_edges = (V * (V - 1) + V);
-    if (E > max_edges)
+  int max_edges = directed ? V * (V - 1) + V : V * (V - 1) / 2 + V;
+  if (E > max_edges)
       E = max_edges;
-  } else {
-    int max_edges = (V * (V - 1) / 2 + V);
-    if (E > max_edges)
-      E = max_edges;
-  }
   vector<Vertex *> vertices;
   for (int i = 0; i < V; i++) {
     Vertex *vertex = graph->InsertV();
@@ -59,20 +50,24 @@ Graph<Vertex, Edge>::Graph(int V, int E, bool directed, bool dense) {
     if (edge != nullptr)
       i++;
   }
-  cout << "Graph(), dense = " << dense << "\n";
+}
+
+template <class Vertex, class Edge> Graph<Vertex, Edge>::~Graph() {
+  vertices.clear();
+  delete graph;
 }
 
 template <class Vertex, class Edge> int Graph<Vertex, Edge>::V() {
-  return graph->V();
+  return vertices.size();
 }
 
 template <class Vertex, class Edge> int Graph<Vertex, Edge>::E() {
-  return graph->E();
+  return edges.size();
 }
 
 template <class Vertex, class Edge> double Graph<Vertex, Edge>::K() {
-  double E = graph->E();
-  double V = graph->V();
+  double E = edges.size();
+  double V = vertices.size();
   return directed ? (E / (V * (V - 1))) : (2 * E / (V * (V - 1)));
 }
 
@@ -116,7 +111,8 @@ template <class Vertex, class Edge> Vertex *Graph<Vertex, Edge>::InsertV() {
 template <class Vertex, class Edge>
 Edge *Graph<Vertex, Edge>::InsertE(Vertex *V1, Vertex *V2) {
   Edge *edge = graph->InsertE(V1, V2);
-  edges.push_back(edge);
+  if (edge)
+    edges.push_back(edge);
   return edge;
 }
 
