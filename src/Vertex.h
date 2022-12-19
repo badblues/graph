@@ -1,42 +1,25 @@
 #pragma once
 
+template <typename Name, typename Data> class Vertex {
+public:
+  Vertex() {}
 
-template<typename Name, typename Data>
-class Vertex{
-    public:
+  Vertex(int index_) { index = index_; }
 
-        Vertex() {}
+  int GetIndex() { return index; }
 
-        Vertex(int index_) {
-            index = index_;
-        }
+  Name GetName() { return name; }
 
-        int GetIndex() {
-            return index;
-        }
-        
-        Name GetName() {
-            return name;
-        }
+  Data GetData() { return data; }
 
-        Data GetData() {
-            return data;
-        }
+  void SetName(Name name_) { name = name_; }
 
-        void SetName(Name name_) {
-            name = name_;
-        }
+  void SetData(Data data_) { data = data_; }
 
-        void SetData(Data data_) {
-            data = data_;
-        } 
+  void SetIndex(int index_) { index = index_; }
 
-        void SetIndex(int index_) {
-            index = index_;
-        }
-        
-    private:
-        Name name = Name(0);
-        Data data = Data(0);
-        int index = 0;
+private:
+  Name name = Name(0);
+  Data data = Data(0);
+  int index = 0;
 };

@@ -2,43 +2,28 @@
 
 #include "Vertex.h"
 
+template <class Vertex, typename W, typename Data> class Edge {
+public:
+  Edge(Vertex *v1_, Vertex *v2_) {
+    v1 = v1_;
+    v2 = v2_;
+  }
 
-template<class Vertex, typename W, typename Data>
-class Edge {
-    public:
+  Vertex *V1() { return v1; }
 
-        Edge(Vertex* v1_, Vertex* v2_) {
-            v1 = v1_;
-            v2 = v2_;
-        }
+  Vertex *V2() { return v2; }
 
-        Vertex* V1() {
-            return v1;
-        }
+  W GetW() { return w; }
 
-        Vertex* V2() {
-            return v2;
-        }
+  void SetW(W w_) { w = w_; }
 
-        W GetW() {
-            return w;
-        }
+  Data GetData() { return data; }
 
-        void SetW(W w_) {
-            w = w_;
-        }
+  void SetData(Data data_) { data = data_; }
 
-        Data GetData() {
-            return data;
-        }
-
-        void SetData(Data data_) {
-            data = data_;
-        }
-        
-    private:
-        Vertex* v1;
-        Vertex* v2;
-        W w = W(0);
-        Data data = Data(0);
+private:
+  Vertex *v1;
+  Vertex *v2;
+  W w = W(0);
+  Data data = Data(0);
 };
