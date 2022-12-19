@@ -6,6 +6,9 @@
 #include <iostream>
 #include <vector>
 
+// TODO: menu (iterators menu)
+// TODO: task1, task2;
+
 int main() {
   MainMenu();
   return 0;

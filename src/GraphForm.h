@@ -15,7 +15,11 @@ public:
   }
 
   ~GraphForm() { Clear(); }
-  
+
+  int V() { return vertex_number; }
+
+  int E() { return edge_number; }
+
   void Clear() {
     cout << "clear\n";
     for (int i = 0; i < matrix.size(); i++)
