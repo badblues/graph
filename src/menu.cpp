@@ -6,6 +6,7 @@
 #define clear_console_ "cls"
 #endif
 
+#define graph_type Vertex<string, int>, Edge<Vertex<string, int>, int, int>
 using namespace std;
 
 int GetNumber(int l_gap, int h_gap, const char *msg) {
@@ -58,36 +59,46 @@ void ShowIteratorMenu() {
           "  1 BEGIN\n"
           "  2 ++\n"
           "  3 *\n"
-          "  0 EXIT\n"
+          "  0 EXIT\n";
+}
+
+Graph<graph_type> *GetGraph() {
+  bool directed, dense;
+  int val = GetNumber(1, 2, "1 - DIRECTED\n2 - NOT DIRECTED\n");
+  directed = (val == 1) ? true : false;
+  val = GetNumber(1, 2, "1 - ADJACENCY LIST\n2 - ADJACENCY MATRIX\n");
+  dense = (val == 1) ? true : false;
+  return new Graph<graph_type>(0, directed, dense);
 }
 
 void MainMenu() {
   int choice;
-  int pos;
-  uint list_size;
   bool flag = true;
   bool iterator_flag = false;
-  bool cl_flag = true;
   string str;
   int val;
-  string key;
+  map<string, Vertex<string, int>*> names;
 
-  val = GetNumber(2, INT32_MAX, "ENTER COLLISION LIST SIZE:\n");
-  CLHashTable<int> cltable(val);
-  val = GetNumber(2, INT32_MAX, "ENTER OPEN ADDRESSING TABLE SIZE:\n");
-  OAHashTable<int> oatable(val);
+  Graph<graph_type>* graph = GetGraph();
 
   while (flag) {
-    cout << oatable.ToString();
+    cout << graph->ToString();
     ShowMainMenu();
-    choice = GetNumber(0, 12, "");
+    choice = GetNumber(0, 19, "");
     switch (choice) {
     case 1: {
-
+      cout << "ENTER NAME:\n";
+      cin >> str;
+      val = GetNumber(INT32_MIN, INT32_MAX, "ENTER VALUE(INT):\n");
+      Vertex<string, int>* V = graph->InsertV();
+      V->SetName(str);
+      V->SetData(val);
+      names.insert({str, V});
       break;
     }
     case 2: {
-
+      cout << "ENTER NAME:\n";
+      cin >> str;
       break;
     }
     case 3: {

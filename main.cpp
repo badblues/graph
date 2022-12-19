@@ -5,14 +5,15 @@
 #include <iostream>
 #include <vector>
 
+#define graph_type Vertex<int, int>, Edge<Vertex<int, int>, int, int>
+
 // TODO: menu
 // TODO: iterators menu
 // TODO: task1, task2;
 
 int main() {
   vector<Vertex<int, int> *> vertices;
-  Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>> graph1(0, 0, false,
-                                                                   false);
+  Graph<graph_type> graph1(0, 0, false, false);
   cout << graph1.ToString();
   cout << "QWERTYUIOP\n";
   vertices.push_back(graph1.InsertV());

@@ -194,4 +194,6 @@ VEIterator<Vertex, Edge> Graph<Vertex, Edge>::VEEnd(Vertex *V) {
   return VEIterator<Vertex, Edge>(this, V, -1);
 }
 
+template class Graph<Vertex<string, int>, Edge<Vertex<string, int>, int, int>>;
+
 template class Graph<Vertex<int, int>, Edge<Vertex<int, int>, int, int>>;

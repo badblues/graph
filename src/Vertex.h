@@ -19,7 +19,7 @@ public:
   void SetIndex(int index_) { index = index_; }
 
 private:
-  Name name = Name(0);
-  Data data = Data(0);
+  Name name;
+  Data data;
   int index = 0;
 };
