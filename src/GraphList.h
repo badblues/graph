@@ -117,7 +117,7 @@ public:
     stringstream *sstr = new stringstream;
     for (int i = 0; i < this->vertex_number; i++) {
       *sstr << i << "[" << vertices[i]->GetName() << ","
-            << vertices[i]->GetName() << "]: ";
+            << vertices[i]->GetData() << "]: ";
       for (int j = 0; j < this->matrix[i].size(); j++) {
         Edge *edge = this->matrix[i][j];
         *sstr << "[" << edge->V1()->GetIndex() << "," << edge->V2()->GetIndex()
