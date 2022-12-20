@@ -89,8 +89,6 @@ public:
   }
 
   bool DeleteV(Vertex *V) override {
-    cout << "delete\n";
-    cout << V->GetIndex();
     int id = V->GetIndex();
     for (int i = 0; i < this->matrix[id].size(); i++) {
       Edge *edge = this->matrix[id][i];

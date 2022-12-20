@@ -9,9 +9,7 @@ using namespace std;
 template <class Vertex, class Edge>
 class GraphList : public GraphForm<Vertex, Edge> {
 public:
-  GraphList(bool directed) : GraphForm<Vertex, Edge>(directed) {
-    cout << "GraphList\n";
-  }
+  GraphList(bool directed) : GraphForm<Vertex, Edge>(directed) {}
 
   ~GraphList() { this->Clear(); }
 

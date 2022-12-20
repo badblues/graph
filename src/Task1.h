@@ -12,10 +12,6 @@ public:
     Solve();
   }
 
-  // Task1(const Task1 task) {
-  //     //TODO;
-  // }
-
   ~Task1() {}
 
   void Set(Graph<Vertex, Edge> *graph_) {
@@ -41,9 +37,11 @@ private:
           V2 = vertices[j];
       }
       Edge *E = graph->InsertE(V1, V2);
-      // FIXME: WON'T WORK WITH ALL TYPES :(
-      E->SetW(0);
-      E->SetData(0);
+      if (E) {
+        // FIXME: WON'T WORK WITH ALL TYPES :(
+        E->SetW(0);
+        E->SetData(0);
+      }
     }
   }
 

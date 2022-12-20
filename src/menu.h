@@ -12,6 +12,7 @@
 #include "Task2.h"
 #include "Vertex.h"
 #include <iostream>
+#include <string>
 #include <map>
 #include <stdlib.h>
 #include <string>
@@ -194,17 +195,22 @@ void MainMenu() {
         break;
       cout << "Name = " << V->GetName() << ", DATA = " << V->GetData() << "\n";
       cin.get();
+      cin.get();
       break;
     }
     case 6: {
       if (!GetVertex(names, &V))
         break;
+      string old_name = V->GetName();
       cout << "ENTER NAME:\n";
       cin >> str;
       if (names.find(str) != names.end() && names.find(str)->second != V) {
         cout << "NAME ALREADY EXIST\n";
         break;
       }
+      auto nodeHandler = names.extract(old_name);
+      nodeHandler.key() = str;
+      names.insert(move(nodeHandler));
       val = GetNumber(INT32_MIN, INT32_MAX, "ENTER VALUE(INT):\n");
       V->SetName(str);
       V->SetData(val);
@@ -337,10 +343,12 @@ void MainMenu() {
       break;
     }
     case 22: {
-      if (!graph->Directed())
+      if (!graph->Directed()) {
         Task1<g_type> task1(graph);
-      else
+      } else {
         cout << "GRAPH MUST NOT BE DIRECTED\n";
+        cin.get();
+      }
       break;
     }
     case 23: {
@@ -354,6 +362,7 @@ void MainMenu() {
         cin.get();
       } else {
         cout << "GRAPH MUST BE DIRECTED\n";
+        cin.get();
       }
       break;
     }

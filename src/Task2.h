@@ -1,8 +1,9 @@
 #include "Edge.h"
 #include "Graph.h"
-#include "Vertex.h"
 #include "Iterator.h"
+#include "Vertex.h"
 #include <vector>
+
 
 using namespace std;
 
@@ -12,10 +13,6 @@ public:
     graph = graph_;
     Solve();
   }
-
-  // Task2(const Task2 task) {
-  //     //TODO;
-  // }
 
   ~Task2() {}
 
@@ -29,7 +26,6 @@ public:
   vector<Vertex *> Result() { return solution; }
 
 private:
-
   void Solve() {
     solution.clear();
     int v = graph->V();
@@ -49,11 +45,13 @@ private:
       } else if (eccentricity == diameter) {
         solution.push_back(vertices[i]);
       }
+      cout << "i = " << i << ", e = " << eccentricity << ", d = " << diameter
+           << "\n";
     }
   }
 
-  int Distance(int id1, int id2,  vector<Vertex*> vertices) {
-    //Dijkstra
+  int Distance(int id1, int id2, vector<Vertex *> vertices) {
+    // Dijkstra
     int v = graph->V();
     int weight[v];
     bool selected[v];
@@ -71,13 +69,14 @@ private:
           min_w_id = j;
         }
       }
-      if (min_w_id == -1) break;
+      if (min_w_id == -1)
+        break;
       for (int z = 0; z < v; z++) {
-        Edge* E = graph->GetEdge(vertices[min_w_id], vertices[z]);
+        Edge *E = graph->GetEdge(vertices[min_w_id], vertices[z]);
         if (E) {
           int matrix_w = E->GetW();
           if (weight[min_w_id] + matrix_w < weight[z])
-            weight[z] = weight[min_w_id] + matrix_w;      
+            weight[z] = weight[min_w_id] + matrix_w;
         }
       }
       selected[min_w_id] = true;
@@ -87,6 +86,6 @@ private:
     return weight[id2];
   }
 
-  vector<Vertex*> solution;
+  vector<Vertex *> solution;
   Graph<Vertex, Edge> *graph;
 };
