@@ -9,6 +9,7 @@
 #include "Graph.h"
 #include "Iterator.h"
 #include "Task1.h"
+#include "Task2.h"
 #include "Vertex.h"
 #include <iostream>
 #include <map>
@@ -343,6 +344,17 @@ void MainMenu() {
       break;
     }
     case 23: {
+      if (graph->Directed()) {
+        Task2<g_type> task2(graph);
+        vector<Vertex<v_type>*> vec = task2.Result(); 
+        cout << "PERIPHERY VERTICES:\n";
+        for (int i = 0; i < vec.size(); i++) {
+          cout << "V.NAME = " << vec[i]->GetName() << "\n";
+        }
+        cin.get();
+      } else {
+        cout << "GRAPH MUST BE DIRECTED\n";
+      }
       break;
     }
     case 0:
